@@ -1,6 +1,7 @@
 package com.jobkonnect.JobPortal.service.impl;
 
 import com.jobkonnect.JobPortal.dto.UserDto;
+import com.jobkonnect.JobPortal.exception.EmailAlreadyExistsException;
 import com.jobkonnect.JobPortal.model.UserModel;
 import com.jobkonnect.JobPortal.repository.UserRepository;
 import com.jobkonnect.JobPortal.service.UserService;
@@ -18,6 +19,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto registerUser(UserDto userDto){
+        // Check if Email already exists
+        if(userRepository.findByEmail(userDto.getEmail()).isPresent()){
+            throw new EmailAlreadyExistsException("Email already exists : "+userDto.getEmail());
+        }
+
         UserModel user = new UserModel();
 
         user.setName(userDto.getName());
