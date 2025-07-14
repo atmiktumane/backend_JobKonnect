@@ -1,5 +1,6 @@
 package com.jobkonnect.JobPortal.controller;
 
+import com.jobkonnect.JobPortal.dto.LoginDto;
 import com.jobkonnect.JobPortal.dto.UserDto;
 import com.jobkonnect.JobPortal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Register
+    // POST - Register
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto){
         return ResponseEntity.ok(userService.registerUser(userDto));
+    }
+
+    // POST - Login
+    @PostMapping("/login")
+    public ResponseEntity<LoginDto> loginUser(@RequestBody LoginDto loginDto){
+        return ResponseEntity.ok(userService.loginUser(loginDto));
     }
 }

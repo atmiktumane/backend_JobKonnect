@@ -1,7 +1,9 @@
 package com.jobkonnect.JobPortal.service.impl;
 
+import com.jobkonnect.JobPortal.dto.LoginDto;
 import com.jobkonnect.JobPortal.dto.UserDto;
 import com.jobkonnect.JobPortal.exception.EmailAlreadyExistsException;
+import com.jobkonnect.JobPortal.exception.InvalidCredentialsException;
 import com.jobkonnect.JobPortal.model.UserModel;
 import com.jobkonnect.JobPortal.repository.UserRepository;
 import com.jobkonnect.JobPortal.service.UserService;
@@ -40,6 +42,26 @@ public class UserServiceImpl implements UserService {
         savedUserDto.setEmail(savedUser.getEmail());
 
         return savedUserDto;
+    }
+
+    @Override
+    public LoginDto loginUser(LoginDto loginDto){
+        // Check if User is present or not
+        UserModel user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(()-> new InvalidCredentialsException("Invalid email or password"));
+
+        // Match Password
+        if(!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())){
+            throw new InvalidCredentialsException("Invalid email or password");
+        }
+
+        // Prepare response body
+        LoginDto response = new LoginDto();
+        response.setEmail(user.getEmail());
+        response.setPassword(user.getPassword());
+
+        return response;
+
     }
 
 }
