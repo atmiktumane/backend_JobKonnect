@@ -4,6 +4,7 @@ import com.jobkonnect.JobPortal.dto.LoginDto;
 import com.jobkonnect.JobPortal.dto.UserDto;
 import com.jobkonnect.JobPortal.exception.EmailAlreadyExistsException;
 import com.jobkonnect.JobPortal.exception.InvalidCredentialsException;
+import com.jobkonnect.JobPortal.model.Role;
 import com.jobkonnect.JobPortal.model.UserModel;
 import com.jobkonnect.JobPortal.repository.UserRepository;
 import com.jobkonnect.JobPortal.service.UserService;
@@ -34,14 +35,24 @@ public class UserServiceImpl implements UserService {
         // Encrypt the password before saving
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
+        // Set Role (from request or default as APPLICANT)
+        if(userDto.getRole() != null){
+            user.setRole(userDto.getRole());
+        } else{
+            user.setRole(Role.APPLICANT); // default role
+        }
+
+        // Save user data in db
         UserModel savedUser = userRepository.save(user);
 
-        UserDto savedUserDto = new UserDto();
-        savedUserDto.setId(savedUser.getId());
-        savedUserDto.setName(savedUser.getName());
-        savedUserDto.setEmail(savedUser.getEmail());
+        // Prepare response body
+        UserDto response = new UserDto();
+        response.setId(savedUser.getId());
+        response.setName(savedUser.getName());
+        response.setEmail(savedUser.getEmail());
+        response.setRole(savedUser.getRole());
 
-        return savedUserDto;
+        return response;
     }
 
     @Override
@@ -59,6 +70,7 @@ public class UserServiceImpl implements UserService {
         LoginDto response = new LoginDto();
         response.setEmail(user.getEmail());
         response.setPassword(user.getPassword());
+        response.setRole(user.getRole());
 
         return response;
 
