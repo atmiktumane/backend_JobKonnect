@@ -70,7 +70,6 @@ public class UserServiceImpl implements UserService {
         LoginDto response = new LoginDto();
         response.setEmail(user.getEmail());
         response.setPassword(user.getPassword());
-        response.setRole(user.getRole());
 
         return response;
 
