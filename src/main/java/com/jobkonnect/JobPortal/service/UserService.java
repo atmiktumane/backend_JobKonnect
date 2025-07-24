@@ -13,5 +13,6 @@ public interface UserService {
 
     ResponseDTO verifyOtp(String email, String otp);
 
+    ResponseDTO changePassword(LoginDto loginDto);
 
 }

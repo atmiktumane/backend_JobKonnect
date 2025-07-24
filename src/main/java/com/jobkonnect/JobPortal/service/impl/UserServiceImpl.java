@@ -141,4 +141,19 @@ public class UserServiceImpl implements UserService {
         return new ResponseDTO("OTP is successfully verified.");
     }
 
+    @Override
+    public ResponseDTO changePassword(LoginDto loginDto) {
+        // Check if User is present or not
+        UserModel user = userRepository.findByEmail(loginDto.getEmail())
+                .orElseThrow(()-> new InvalidCredentialsException("User not found."));
+
+        // Update new Password (encrypted)
+        user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
+
+        // Save in DB
+        userRepository.save(user);
+
+        return new ResponseDTO("Password changed successfully.");
+    }
+
 }

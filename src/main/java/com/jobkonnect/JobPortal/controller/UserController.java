@@ -45,4 +45,10 @@ public class UserController {
 
         return new ResponseEntity<>(userService.verifyOtp(email, otp), HttpStatus.OK);
     }
+
+    // POST - Change Password
+    @PostMapping("/changePassword")
+    public ResponseEntity<ResponseDTO> changePassword(@RequestBody LoginDto loginDto){
+        return new ResponseEntity<>(userService.changePassword(loginDto), HttpStatus.OK);
+    }
 }
