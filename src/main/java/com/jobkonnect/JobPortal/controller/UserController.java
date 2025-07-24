@@ -1,9 +1,11 @@
 package com.jobkonnect.JobPortal.controller;
 
 import com.jobkonnect.JobPortal.dto.LoginDto;
+import com.jobkonnect.JobPortal.dto.ResponseDTO;
 import com.jobkonnect.JobPortal.dto.UserDto;
 import com.jobkonnect.JobPortal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,5 +26,14 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<LoginDto> loginUser(@RequestBody LoginDto loginDto){
         return ResponseEntity.ok(userService.loginUser(loginDto));
+    }
+
+    // Send OTP
+    @PostMapping("/sendOtp/{email}")
+    public ResponseEntity<ResponseDTO> sendOtp(@PathVariable String email) throws Exception {
+//        userService.sendOtp(email);
+//        return new ResponseEntity<>(new ResponseDTO("OTP sent successfully."), HttpStatus.OK);
+
+        return new ResponseEntity<>(userService.sendOtp(email), HttpStatus.OK);
     }
 }

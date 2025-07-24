@@ -1,16 +1,26 @@
 package com.jobkonnect.JobPortal.service.impl;
 
 import com.jobkonnect.JobPortal.dto.LoginDto;
+import com.jobkonnect.JobPortal.dto.ResponseDTO;
 import com.jobkonnect.JobPortal.dto.UserDto;
 import com.jobkonnect.JobPortal.exception.EmailAlreadyExistsException;
 import com.jobkonnect.JobPortal.exception.InvalidCredentialsException;
+import com.jobkonnect.JobPortal.model.OtpModel;
 import com.jobkonnect.JobPortal.model.Role;
 import com.jobkonnect.JobPortal.model.UserModel;
+import com.jobkonnect.JobPortal.repository.OtpRepository;
 import com.jobkonnect.JobPortal.repository.UserRepository;
 import com.jobkonnect.JobPortal.service.UserService;
+import com.jobkonnect.JobPortal.utilities.Data;
+import com.jobkonnect.JobPortal.utilities.Utilities;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service  // This annotation is mandatory for Spring to detect it as a bean
 public class UserServiceImpl implements UserService {
@@ -18,7 +28,13 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private OtpRepository otpRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder; // inject the bean
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Override
     public UserDto registerUser(UserDto userDto){
@@ -72,6 +88,44 @@ public class UserServiceImpl implements UserService {
         response.setPassword(user.getPassword());
 
         return response;
+
+    }
+
+    @Override
+    public ResponseDTO sendOtp(String email) throws Exception {
+//        // Testing
+//        System.out.println("Email in API request params : "+ email);
+
+        // Check if Email is present or not
+        UserModel user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new InvalidCredentialsException("Invalid email"));
+
+        // MimeMessage : return HTML Body in Message
+        MimeMessage mailMessage = mailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(mailMessage, true);
+
+        message.setTo(email);  // Set Receiver Email
+        message.setSubject("Your OTP Code");  // Set Email Subject
+
+        // Generate OTP from Utilities
+        String generatedOtp = Utilities.generateOTP();
+
+        // Create otp data object with Given Data (i.e., email, otpCode, currentTime)
+        OtpModel otp = new OtpModel(email, generatedOtp, LocalDateTime.now());
+
+        // Save otp data in database
+        otpRepository.save(otp);
+
+        // Username of receiver
+        String username = user.getName();
+
+        // Email Body - Call "Data" Utility Class
+        message.setText(Data.otpEmailBody(generatedOtp, username),true);
+
+        mailSender.send(mailMessage);
+
+        return new ResponseDTO("OTP sent successfully.");
+
 
     }
 
