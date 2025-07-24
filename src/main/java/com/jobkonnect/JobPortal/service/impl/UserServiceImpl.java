@@ -5,6 +5,7 @@ import com.jobkonnect.JobPortal.dto.ResponseDTO;
 import com.jobkonnect.JobPortal.dto.UserDto;
 import com.jobkonnect.JobPortal.exception.EmailAlreadyExistsException;
 import com.jobkonnect.JobPortal.exception.InvalidCredentialsException;
+import com.jobkonnect.JobPortal.exception.ResourceNotFoundException;
 import com.jobkonnect.JobPortal.model.OtpModel;
 import com.jobkonnect.JobPortal.model.Role;
 import com.jobkonnect.JobPortal.model.UserModel;
@@ -127,6 +128,17 @@ public class UserServiceImpl implements UserService {
         return new ResponseDTO("OTP sent successfully.");
 
 
+    }
+
+    @Override
+    public ResponseDTO verifyOtp(String email, String otp) {
+        OtpModel otpEntity = otpRepository.findById(email).orElseThrow(()-> new ResourceNotFoundException("OTP not found"));
+
+        if(!otpEntity.getOtpCode().equals(otp)){
+            throw new ResourceNotFoundException("OTP is Incorrect");
+        }
+
+        return new ResponseDTO("OTP is successfully verified.");
     }
 
 }
