@@ -75,23 +75,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginDto loginUser(LoginDto loginDto){
+    public UserDto loginUser(LoginDto loginDto){
         // Check if User is present or not
         UserModel user = userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow(()-> new InvalidCredentialsException("Invalid email or password"));
+
 
         // Match Password
         if(!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())){
             throw new InvalidCredentialsException("Invalid email or password");
         }
 
-        // Prepare response body
-        LoginDto response = new LoginDto();
+        // Prepare Login response body
+        UserDto response = new UserDto();
+        response.setId(user.getId());
+        response.setName(user.getName());
         response.setEmail(user.getEmail());
-        response.setPassword(user.getPassword());
+        response.setRole(user.getRole());
 
         return response;
-
     }
 
     @Override

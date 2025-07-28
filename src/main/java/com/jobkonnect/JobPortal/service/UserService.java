@@ -7,7 +7,7 @@ import com.jobkonnect.JobPortal.dto.UserDto;
 public interface UserService {
     UserDto registerUser(UserDto userDto);
 
-    LoginDto loginUser(LoginDto loginDto);
+    UserDto loginUser(LoginDto loginDto);
 
     ResponseDTO sendOtp(String email) throws Exception;
 
