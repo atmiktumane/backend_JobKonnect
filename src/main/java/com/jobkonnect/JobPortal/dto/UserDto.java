@@ -8,15 +8,17 @@ public class UserDto {
     private String email;
     private String password;
     private Role role;  // Enum field
+    private String profileId;
 
     public UserDto() {}
 
-    public UserDto(String id, String name, String email, String password, Role role) {
+    public UserDto(String id, String name, String email, String password, Role role, String profileId) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.profileId = profileId;
     }
 
     // Getter & Setter functions
@@ -58,5 +60,13 @@ public class UserDto {
     }
     public void setRole(Role role){
         this.role = role;
+    }
+
+    public String getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 }

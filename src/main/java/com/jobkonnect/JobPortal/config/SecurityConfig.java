@@ -18,8 +18,12 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // disable CSRF for testing APIs via Postman
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/users/register", "/api/v1/users/login", "/api/v1/users/sendOtp/**", "/api/v1/users/verifyOtp/*/*", "/api/v1/users/changePassword").permitAll() // allow register API without auth
-                        .anyRequest().authenticated() // other endpoints require authentication
+                        // ******** Below are Public APIs ***********
+//                        .requestMatchers("/api/v1/users/register", "/api/v1/users/login", "/api/v1/users/sendOtp/**", "/api/v1/users/verifyOtp/*/*", "/api/v1/users/changePassword").permitAll() // allow register API without auth
+//                        .anyRequest().authenticated() // other endpoints require authentication
+
+                        // ******** Make all APIs public ***********
+                        .anyRequest().permitAll() // Allow ALL endpoints without authentication
                 )
                 .httpBasic(basic -> {}); // enable basic auth for other endpoints
 

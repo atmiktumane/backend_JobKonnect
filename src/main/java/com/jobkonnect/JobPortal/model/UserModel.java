@@ -11,15 +11,17 @@ public class UserModel {
     private String email;
     private String password;
     private Role role;  // Enum field
+    private String profileId;
 
     public UserModel() {
     }
 
-    public UserModel(String name, String email, String password, Role role) {
+    public UserModel(String name, String email, String password, Role role, String profileId) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.profileId = profileId;
     }
 
     // Getter and Setter methods
@@ -61,5 +63,13 @@ public class UserModel {
     }
     public void setRole(Role role){
         this.role = role;
+    }
+
+    public String getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 }

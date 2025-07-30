@@ -11,6 +11,7 @@ import com.jobkonnect.JobPortal.model.Role;
 import com.jobkonnect.JobPortal.model.UserModel;
 import com.jobkonnect.JobPortal.repository.OtpRepository;
 import com.jobkonnect.JobPortal.repository.UserRepository;
+import com.jobkonnect.JobPortal.service.ProfileService;
 import com.jobkonnect.JobPortal.service.UserService;
 import com.jobkonnect.JobPortal.utilities.Data;
 import com.jobkonnect.JobPortal.utilities.Utilities;
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
     private OtpRepository otpRepository;
 
     @Autowired
+    private ProfileService profileService;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder; // inject the bean
 
     @Autowired
@@ -53,6 +57,8 @@ public class UserServiceImpl implements UserService {
 
         // Encrypt the password before saving
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        user.setProfileId(profileService.createProfile(userDto.getEmail()));
 
         // Set Role (from request or default as APPLICANT)
         if(userDto.getRole() != null){
@@ -92,6 +98,7 @@ public class UserServiceImpl implements UserService {
         response.setName(user.getName());
         response.setEmail(user.getEmail());
         response.setRole(user.getRole());
+        response.setProfileId(user.getProfileId());
 
         return response;
     }
