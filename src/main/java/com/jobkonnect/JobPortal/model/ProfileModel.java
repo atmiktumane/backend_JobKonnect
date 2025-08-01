@@ -6,6 +6,7 @@ import com.jobkonnect.JobPortal.dto.ProfileDTO;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Base64;
 import java.util.List;
 
 @Document(collection = "profiles")
@@ -17,22 +18,24 @@ public class ProfileModel {
     private String company;
     private String location;
     private String about;
+    private byte[] image;
     private List<String> skills;
     private List<Experience> experiences;
     private List<Certification> certifications;
 
     public ProfileDTO toDTO(){
-        return new ProfileDTO(this.id, this.email, this.jobTitle, this.company, this.location, this.about, this.skills, this.experiences, this.certifications);
+        return new ProfileDTO(this.id, this.email, this.jobTitle, this.company, this.location, this.about, this.image!=null? Base64.getEncoder().encodeToString(this.image):null, this.skills, this.experiences, this.certifications);
     }
 
     public ProfileModel() {}
-    public ProfileModel(String id, String email, String jobTitle, String company, String location, String about, List<String> skills, List<Experience> experiences, List<Certification> certifications) {
+    public ProfileModel(String id, String email, String jobTitle, String company, String location, String about, byte[] image, List<String> skills, List<Experience> experiences, List<Certification> certifications) {
         this.id = id;
         this.email = email;
         this.jobTitle = jobTitle;
         this.company = company;
         this.location = location;
         this.about = about;
+        this.image = image;
         this.skills = skills;
         this.experiences = experiences;
         this.certifications = certifications;
@@ -110,5 +113,13 @@ public class ProfileModel {
 
     public void setCertifications(List<Certification> certifications) {
         this.certifications = certifications;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

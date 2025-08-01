@@ -2,6 +2,7 @@ package com.jobkonnect.JobPortal.dto;
 
 import com.jobkonnect.JobPortal.model.ProfileModel;
 
+import java.util.Base64;
 import java.util.List;
 
 public class ProfileDTO {
@@ -11,25 +12,27 @@ public class ProfileDTO {
     private String company;
     private String location;
     private String about;
+    private String image;
     private List<String> skills;
     private List<Experience> experiences;
     private List<Certification> certifications;
 
     public ProfileModel toEntity(){
-        return new ProfileModel(this.id, this.email, this.jobTitle, this.company, this.location, this.about, this.skills, this.experiences, this.certifications);
+        return new ProfileModel(this.id, this.email, this.jobTitle, this.company, this.location, this.about, this.image!=null? Base64.getDecoder().decode(this.image):null, this.skills, this.experiences, this.certifications);
     }
 
     // Construtors - NoArgsConstructor & AllArgsContructor
 
     public ProfileDTO() {}
 
-    public ProfileDTO(String id, String email, String jobTitle, String company, String location, String about, List<String> skills, List<Experience> experiences, List<Certification> certifications) {
+    public ProfileDTO(String id, String email, String jobTitle, String company, String location, String about, String image, List<String> skills, List<Experience> experiences, List<Certification> certifications) {
         this.id = id;
         this.email = email;
         this.jobTitle = jobTitle;
         this.company = company;
         this.location = location;
         this.about = about;
+        this.image = image;
         this.skills = skills;
         this.experiences = experiences;
         this.certifications = certifications;
@@ -107,5 +110,13 @@ public class ProfileDTO {
 
     public void setCertifications(List<Certification> certifications) {
         this.certifications = certifications;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
