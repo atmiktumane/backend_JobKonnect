@@ -1,6 +1,5 @@
 package com.jobkonnect.JobPortal.model;
 
-import com.jobkonnect.JobPortal.dto.Applicant;
 import com.jobkonnect.JobPortal.dto.JobDTO;
 import com.jobkonnect.JobPortal.dto.JobStatus;
 import lombok.AllArgsConstructor;
@@ -21,7 +20,7 @@ public class JobModel {
     private String id;
     private String jobTitle;
     private String company;
-    private List<Applicant> applicants;
+    private List<ApplicantModel> applicants;
     private String about;
     private String experience;
     private String jobType;
@@ -33,6 +32,6 @@ public class JobModel {
     private JobStatus jobStatus;
 
     public JobDTO toDTO(){
-        return new JobDTO(this.id, this.jobTitle, this.company, this.applicants, this.about, this.experience, this.jobType, this.location, this.packageOffered, this.postTime, this.description, this.skillsRequired, this.jobStatus);
+        return new JobDTO(this.id, this.jobTitle, this.company, this.applicants!=null?this.applicants.stream().map((x)->x.toDTO()).toList():null, this.about, this.experience, this.jobType, this.location, this.packageOffered, this.postTime, this.description, this.skillsRequired, this.jobStatus);
     }
 }

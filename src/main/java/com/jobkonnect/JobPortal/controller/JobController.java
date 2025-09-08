@@ -1,6 +1,8 @@
 package com.jobkonnect.JobPortal.controller;
 
+import com.jobkonnect.JobPortal.dto.ApplicantDTO;
 import com.jobkonnect.JobPortal.dto.JobDTO;
+import com.jobkonnect.JobPortal.dto.ResponseDTO;
 import com.jobkonnect.JobPortal.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,4 +37,12 @@ public class JobController {
     public ResponseEntity<JobDTO> getJob(@PathVariable String id) {
         return new ResponseEntity<>(jobService.getJob(id), HttpStatus.OK);
     }
+
+    // POST - Apply Job
+    @PostMapping("/apply/{id}")
+    public ResponseEntity<ResponseDTO> applyJob(@PathVariable String id, @RequestBody ApplicantDTO applicantDTO){
+        jobService.applyJob(id, applicantDTO);
+        return new ResponseEntity<>(new ResponseDTO("Applied Job Successfully"), HttpStatus.OK);
+    }
+
 }

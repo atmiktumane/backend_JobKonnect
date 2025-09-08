@@ -18,14 +18,14 @@ public class ProfileController {
 
     // Get Profile Details
     @GetMapping("/details/{id}")
-    public ResponseEntity<ProfileDTO> verifyOtp(@PathVariable String id) {
+    public ResponseEntity<ProfileDTO> getProfile(@PathVariable String id) {
 
         return new ResponseEntity<>(profileService.getProfile(id), HttpStatus.OK);
     }
 
     // Update Profile
     @PutMapping("/update")
-    public ResponseEntity<ProfileDTO> verifyOtp(@RequestBody ProfileDTO profileDTO) {
+    public ResponseEntity<ProfileDTO> updateProfile(@RequestBody ProfileDTO profileDTO) {
 
         return new ResponseEntity<>(profileService.updateProfile(profileDTO), HttpStatus.OK);
     }
